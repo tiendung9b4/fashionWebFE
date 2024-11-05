@@ -13,7 +13,7 @@ export default function Header() {
   const navigate = useNavigate()
   const user = useSelector((state) => state.auth.user)
 
-  console.log('userr: '+JSON.stringify(user))
+  console.log('userr: ' + JSON.stringify(user))
 
   const handleLogout = () => {
     cookies.remove('access_token')
@@ -22,36 +22,36 @@ export default function Header() {
   }
 
   return (
-    <header style={{position: "fixed", width: "100%"}} className="bg-gray-900 text-white py-4">
+    <header style={{ position: "fixed", width: "100%" }} className="bg-gray-900 text-white py-4">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <a href="/" className="text-xl font-bold">
             Fashion Store
           </a>
-          
+
         </div>
         {user?.roles?.includes('admin') && <>
           <Link
             to="/manageCoupon"
           >
-              ManageCoupon
+            ManageCoupon
           </Link>
           <Link
             to="/manageCategory"
           >
-              ManageCategory
+            ManageCategory
           </Link>
           <Link
             to="/manageSubCategory"
           >
-              ManageSubCategory
+            ManageSubCategory
           </Link>
           <Link
             to="/manageProduct"
           >
-              ManageProduct
+            ManageProduct
           </Link>
-        
+
         </>}
 
         <nav>
@@ -59,59 +59,59 @@ export default function Header() {
             <Link
               to="/home"
             >
-                Home
+              Home
             </Link>
             <Link
               to="/products"
             >
-                Products
+              Products
             </Link>
-            
+
             {
-              user['email'] == null ?<>
-                  <Link
-                    to="/login"
-                  >
-                      Login
-                  </Link>
-                  <Link
-                    to="/register"
-                  >
-                      Register
-                  </Link>
-                </>
-              : <>
-              <Link
-                to="/cart"
-              >
-                Cart
-              </Link>
-              <Link
-                to="/order"
-              >
-                Order
-              </Link>
-              <Link
-                to="/chat"
-              >
-                Chat
-              </Link>
-                <div>Hello {user['name']}</div>
+              user['email'] == null ? <>
                 <Link
-                    onClick={() => handleLogout()}
+                  to="/login"
                 >
-                    Logout
+                  Login
                 </Link>
-                <div style={{ width: '50px' }}>
-                  <Link to={`/profile`}>
-                    {user['avatarUrl'] ? (
-                      <img style={{borderRadius: '50%'}} className="bg-blue-500 w-10 h-10 flex justify-center items-center" alt='' src={user['avatarUrl']} />
-                    ) : (
-                      <div style={{borderRadius: '50%'}} className="bg-blue-500 w-10 h-10 flex justify-center items-center">{user['name'][0]?.toUpperCase()}</div>
-                    )}
-                  </Link>
-                </div>
+                <Link
+                  to="/register"
+                >
+                  Register
+                </Link>
               </>
+                : <>
+                  <Link
+                    to="/cart"
+                  >
+                    Cart
+                  </Link>
+                  <Link
+                    to="/order"
+                  >
+                    Order
+                  </Link>
+                  <Link
+                    to="/chat"
+                  >
+                    Chat
+                  </Link>
+                  <div>Hello {user['name']}</div>
+                  <Link
+                    onClick={() => handleLogout()}
+                  >
+                    Logout
+                  </Link>
+                  <div style={{ width: '50px' }}>
+                    <Link to={`/profile`}>
+                      {user['avatarUrl'] ? (
+                        <img style={{ borderRadius: '50%' }} className="bg-blue-500 w-10 h-10 flex justify-center items-center" alt='' src={user['avatarUrl']} />
+                      ) : (
+                        <div style={{ borderRadius: '50%' }} className="bg-blue-500 w-10 h-10 flex justify-center items-center">{user['name'][0]?.toUpperCase()}</div>
+                      )}
+                    </Link>
+                  </div>
+                </>
             }
           </ul>
         </nav>

@@ -7,24 +7,25 @@ import { ErrorCommonAxios } from '../axios/ErrorCommonAxios';
 import { ApiGetAllMessageByChatId, ApiGetChatByBothUserId } from '../services/chatService';
 
 export default function Chat() {
-    const user = useSelector((state) => state.auth.user)
-    const navigate = useNavigate()
+  const user = useSelector((state) => state.auth.user)
+  const navigate = useNavigate()
   const [connection, setConnection] = useState(null);
   const [admins, setAdmins] = useState([]); // List of admins
   const [selectedAdmin, setSelectedAdmin] = useState(null); // Currently selected admin
   const [messages, setMessages] = useState([]); // List of messages
   const [messageInput, setMessageInput] = useState(''); // Input for new message
+  const [userMap, setUserMap] = useState({}); // Map for user IDs to usernames
 
   useEffect(() => {
-    if(!user['id']){
-        navigate('/login')
-    }else{
-        const newConnection = new signalR.HubConnectionBuilder()
-          .withUrl("https://localhost:7006/chat?userId="+user['id']) // Replace with your SignalR endpoint
-          .withAutomaticReconnect()
-          .build();
-    
-        setConnection(newConnection);
+    if (!user['id']) {
+      navigate('/login')
+    } else {
+      const newConnection = new signalR.HubConnectionBuilder()
+        .withUrl("https://localhost:7006/chat?userId=" + user['id']) // Replace with your SignalR endpoint
+        .withAutomaticReconnect()
+        .build();
+
+      setConnection(newConnection);
     }
 
   }, []);
@@ -36,59 +37,77 @@ export default function Chat() {
           console.log('SignalR connected');
           // Fetch list of admins
           fetchAdmins();
+          fetchUserMap(); // Fetch user map for ID-to-username mapping
+
           // Listen for new messages
           connection.on('ReceiveMessage', (fromUserName, messageContent) => {
-            setMessages(prevMessages => [...prevMessages, { fromUserName, messageContent }]);
+            setMessages(prevMessages => [...prevMessages, { fromUserName: userMap[fromUserName] || fromUserName, messageContent }]);
           });
         })
         .catch(err => console.error('SignalR connection error:', err));
     }
-  }, [connection]);
+  }, [connection, userMap]);
 
   //Load all message
   useEffect(() => {
-    if(!user['id']){
-        navigate('/login')
-    }else{
-        if(selectedAdmin?.id){
-            ApiGetChatByBothUserId(selectedAdmin?.id, user['id'])
-            .then(data => {
-                ApiGetAllMessageByChatId(data?.result?.chatId)
-                .then(data => {
-                    setMessages(data?.result)
-                })
-            })
-            .catch(error => {
-                setMessages([])
-            })
-        }
+    if (!user['id']) {
+      navigate('/login')
+    } else {
+      if (selectedAdmin?.id) {
+        ApiGetChatByBothUserId(selectedAdmin?.id, user['id'])
+          .then(data => {
+            ApiGetAllMessageByChatId(data?.result?.chatId)
+              .then(data => {
+                const mappedMessages = data?.result.map(msg => ({
+                  ...msg,
+                  fromUserName: userMap[msg.fromUserName] || msg.fromUserName,
+                  toUserName: userMap[msg.toUserName] || msg.toUserName,
+                }));
+
+                setMessages(mappedMessages)
+              })
+          })
+          .catch(error => {
+            setMessages([])
+          })
+      }
 
     }
-  }, [selectedAdmin])
+  }, [selectedAdmin, userMap])
 
   // Fetch list of admins
   const fetchAdmins = () => {
     // Replace with your API call to fetch admins
     ApiGetAllUser()
-    .then(data => {
-        if(user?.roles?.includes('admin')){
-            setAdmins(data?.result?.filter(u => u.id != user['id']));
-            // Automatically select the first admin
-            if (data?.result?.length > 0) {
-                setSelectedAdmin(data?.result[0]);
-            }
-        }else{
-            setAdmins(data?.result?.filter(u => u.roles.includes('admin')));
-            // Automatically select the first admin
-            if (data?.result?.filter(u => u.roles.includes('admin'))?.length > 0) {
-                setSelectedAdmin(data?.result[0]);
-            }
+      .then(data => {
+        if (user?.roles?.includes('admin')) {
+          setAdmins(data?.result?.filter(u => u.id != user['id']));
+          // Automatically select the first admin
+          if (data?.result?.length > 0) {
+            setSelectedAdmin(data?.result[0]);
+          }
+        } else {
+          setAdmins(data?.result?.filter(u => u.roles.includes('admin')));
+          // Automatically select the first admin
+          if (data?.result?.filter(u => u.roles.includes('admin'))?.length > 0) {
+            setSelectedAdmin(data?.result[0]);
+          }
         }
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         ErrorCommonAxios(error)
-    })
-    
+      })
+
+  };
+  // Fetch the user map (ID -> Username)
+  const fetchUserMap = () => {
+    ApiGetAllUser().then(data => {
+      const map = {};
+      data?.result.forEach(u => {
+        map[u.id] = u.name;
+      });
+      setUserMap(map);
+    });
   };
 
   // Send a new message
@@ -99,7 +118,7 @@ export default function Chat() {
       setMessageInput('');
     }
   };
-//container mx-auto py-8 flex flex-wrap pt-32 mb-32
+  //container mx-auto py-8 flex flex-wrap pt-32 mb-32
   return (
     <div className="flex h-screen container mx-auto pt-32 mb-32">
       {/* Left Sidebar for Admins */}
@@ -107,8 +126,10 @@ export default function Chat() {
         <h2 className="text-lg font-semibold mb-4">Select Admin</h2>
         <ul>
           {admins.map(admin => (
-            <li key={admin?.id} onClick={() => setSelectedAdmin(admin)} className={`cursor-pointer ${admin?.id === selectedAdmin?.id ? 'bg-blue-500 text-white' : 'bg-gray-300' } p-2 rounded mb-2`}>
+            <li key={admin?.id} onClick={() => setSelectedAdmin(admin)} className={`cursor-pointer ${admin?.id === selectedAdmin?.id ? 'bg-blue-500 text-white' : 'bg-gray-300'} p-2 rounded mb-2`}>
               {admin?.name}
+              <img style={{ borderRadius: '50%' }} className="bg-blue-500 w-10 h-10 flex justify-center items-center" alt='' src={admin?.avatarUrl} />
+
             </li>
           ))}
         </ul>
