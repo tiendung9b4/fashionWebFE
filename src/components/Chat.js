@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as signalR from '@microsoft/signalr'; // Import SignalR library
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,16 @@ export default function Chat() {
   const [messages, setMessages] = useState([]); // List of messages
   const [messageInput, setMessageInput] = useState(''); // Input for new message
   const [userMap, setUserMap] = useState({}); // Map for user IDs to usernames
+
+  const messagesEndRef = useRef(null); // Ref for the end of the message list
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
 
   useEffect(() => {
     if (!user['id']) {
@@ -35,18 +45,38 @@ export default function Chat() {
       connection.start()
         .then(() => {
           console.log('SignalR connected');
-          // Fetch list of admins
+          // Fetch user map and admins
           fetchAdmins();
-          fetchUserMap(); // Fetch user map for ID-to-username mapping
-
-          // Listen for new messages
-          connection.on('ReceiveMessage', (fromUserName, messageContent) => {
-            setMessages(prevMessages => [...prevMessages, { fromUserName: userMap[fromUserName] || fromUserName, messageContent }]);
-          });
+          fetchUserMap(); // Ensure this is populated before messages start arriving
         })
         .catch(err => console.error('SignalR connection error:', err));
+
+      connection.onclose(() => {
+        console.log('SignalR connection closed. Reconnecting...');
+        setTimeout(() => connection.start(), 5000); // Reconnect every 5 seconds
+      });
+
+
     }
-  }, [connection, userMap]);
+  }, [connection]);
+
+  useEffect(() => {
+    if (connection && Object.keys(userMap).length > 0) { // Check if userMap is populated
+      // Setup the ReceiveMessage listener
+      connection.on('ReceiveMessage', (fromUserId, messageContent) => {
+        const fromUserName = userMap[fromUserId] || fromUserId;
+        setMessages(prevMessages => [
+          ...prevMessages,
+          { fromUserName, messageContent }
+        ]);
+      });
+    }
+    return () => {
+      if (connection) {
+        connection.off('ReceiveMessage'); // Clean up listener
+      }
+    };
+  }, [connection, userMap]); // Trigger when userMap is updated
 
   //Load all message
   useEffect(() => {
@@ -73,26 +103,18 @@ export default function Chat() {
       }
 
     }
-  }, [selectedAdmin, userMap])
+  }, [selectedAdmin, connection, userMap])
 
   // Fetch list of admins
   const fetchAdmins = () => {
     // Replace with your API call to fetch admins
     ApiGetAllUser()
       .then(data => {
-        if (user?.roles?.includes('admin')) {
-          setAdmins(data?.result?.filter(u => u.id != user['id']));
-          // Automatically select the first admin
-          if (data?.result?.length > 0) {
-            setSelectedAdmin(data?.result[0]);
-          }
-        } else {
-          setAdmins(data?.result?.filter(u => u.roles.includes('admin')));
-          // Automatically select the first admin
-          if (data?.result?.filter(u => u.roles.includes('admin'))?.length > 0) {
-            setSelectedAdmin(data?.result[0]);
-          }
-        }
+        const adminsList = user.roles.includes('admin')
+          ? data.result.filter(u => u.id !== user.id)
+          : data.result.filter(u => u.roles.includes('admin'));
+        setAdmins(adminsList);
+        if (adminsList.length > 0) setSelectedAdmin(adminsList[0]);
       })
       .catch(error => {
         ErrorCommonAxios(error)
@@ -118,6 +140,15 @@ export default function Chat() {
       setMessageInput('');
     }
   };
+  // Handle Enter key press in input field
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent newline if the input is a textarea
+      sendMessage();
+    }
+  };
+
+
   //container mx-auto py-8 flex flex-wrap pt-32 mb-32
   return (
     <div className="flex h-screen container mx-auto pt-32 mb-32">
@@ -142,17 +173,23 @@ export default function Chat() {
         </div>
         <div className="overflow-y-auto h-5/6">
           {messages.map((msg, index) => (
-            <div key={index} className={`mb-2 ${msg.user === 'Me' ? 'text-right' : ''}`}>
-              <strong>{msg.fromUserName}: </strong>
-              <span>{msg.messageContent}</span>
+            <div key={index} className={`mb-2 flex ${msg.fromUserName === user.name ? 'justify-start' : 'justify-end'}`}>
+              <div className={`p-2 rounded-lg ${msg.fromUserName === user.name ? 'bg-blue-200 text-left' : 'bg-gray-300 text-right'}`}>
+                <strong>{msg.fromUserName}: </strong>
+                <span>{msg.messageContent}</span>
+              </div>
             </div>
           ))}
+          {/* Ref to scroll to the bottom */}
+          <div ref={messagesEndRef} />
         </div>
         <div className="mt-4 flex">
           <input
             type="text"
             value={messageInput}
             onChange={(e) => setMessageInput(e.target.value)}
+            onKeyDown={handleKeyPress}
+
             className="border border-gray-300 rounded px-3 py-2 w-full mr-2"
             placeholder="Type your message..."
           />
