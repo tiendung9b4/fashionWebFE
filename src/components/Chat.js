@@ -159,7 +159,7 @@ export default function Chat() {
           {admins.map(admin => (
             <li key={admin?.id} onClick={() => setSelectedAdmin(admin)} className={`cursor-pointer ${admin?.id === selectedAdmin?.id ? 'bg-blue-500 text-white' : 'bg-gray-300'} p-2 rounded mb-2`}>
               {admin?.name}
-              <img style={{ borderRadius: '50%' }} className="bg-blue-500 w-10 h-10 flex justify-center items-center" alt='' src={admin?.avatarUrl} />
+              {/* <img style={{ borderRadius: '50%' }} className="bg-blue-500 w-10 h-10 flex justify-center items-center" alt='' src={admin?.avatarUrl} /> */}
 
             </li>
           ))}
