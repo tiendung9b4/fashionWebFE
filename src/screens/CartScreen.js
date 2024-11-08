@@ -6,9 +6,7 @@ import Cart from '../components/Cart'
 export default function CartScreen() {
   return (
     <div>
-        <Header/>
-        <Cart/>
-        <Footer/>
+      <Cart />
     </div>
   )
 }

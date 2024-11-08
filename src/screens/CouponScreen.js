@@ -6,9 +6,7 @@ import Coupon from '../components/Coupon'
 export default function CouponScreen() {
   return (
     <div>
-        <Header/>
-        <Coupon/>
-        <Footer/>
+      <Coupon />
     </div>
   )
 }

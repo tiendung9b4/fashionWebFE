@@ -6,9 +6,7 @@ import ManageProduct from '../components/ManageProduct'
 export default function ManageProductScreen() {
   return (
     <div>
-        <Header/>
-        <ManageProduct/>
-        <Footer/>
+      <ManageProduct />
     </div>
   )
 }

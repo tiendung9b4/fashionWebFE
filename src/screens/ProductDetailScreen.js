@@ -6,9 +6,7 @@ import ProductDetail from '../components/ProductDetail'
 export default function ProductDetailScreen() {
   return (
     <div>
-        <Header/>
-        <ProductDetail/>
-        <Footer/>
+      <ProductDetail />
     </div>
   )
 }

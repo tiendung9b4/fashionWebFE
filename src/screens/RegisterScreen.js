@@ -6,9 +6,7 @@ import Register from '../components/Register'
 export default function RegisterScreen() {
   return (
     <div>
-        <Header/>
-        <Register/>
-        <Footer/>
+      <Register />
     </div>
   )
 }

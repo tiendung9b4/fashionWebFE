@@ -6,9 +6,7 @@ import Chat from '../components/Chat'
 export default function ChatScreen() {
   return (
     <div>
-        <Header/>
-        <Chat/>
-        <Footer/>
+      <Chat />
     </div>
   )
 }

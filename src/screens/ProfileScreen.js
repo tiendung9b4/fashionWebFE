@@ -6,9 +6,7 @@ import Profile from '../components/Profile'
 export default function ProfileScreen() {
   return (
     <div>
-        <Header/>
-        <Profile/>
-        <Footer/>
+      <Profile />
     </div>
   )
 }

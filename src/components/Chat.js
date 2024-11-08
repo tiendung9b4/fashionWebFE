@@ -36,8 +36,17 @@ export default function Chat() {
         .build();
 
       setConnection(newConnection);
-    }
+      if (!user['id']) {
+        navigate('/login')
+      } else {
+        const newConnection = new signalR.HubConnectionBuilder()
+          .withUrl("https://localhost:7006/chat?userId=" + user['id']) // Replace with your SignalR endpoint
+          .withAutomaticReconnect()
+          .build();
 
+        setConnection(newConnection);
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -119,7 +128,6 @@ export default function Chat() {
       .catch(error => {
         ErrorCommonAxios(error)
       })
-
   };
   // Fetch the user map (ID -> Username)
   const fetchUserMap = () => {

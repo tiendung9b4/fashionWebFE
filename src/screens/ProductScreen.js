@@ -6,9 +6,7 @@ import Product from '../components/Product'
 export default function ProductScreen() {
   return (
     <div>
-        <Header/>
-        <Product/>
-        <Footer/>
+      <Product />
     </div>
   )
 }

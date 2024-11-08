@@ -6,9 +6,7 @@ import ManageSubCategory from '../components/ManageSubCategory'
 export default function ManageSubCategoryScreen() {
   return (
     <div>
-        <Header/>
-        <ManageSubCategory/>
-        <Footer/>
+      <ManageSubCategory />
     </div>
   )
 }

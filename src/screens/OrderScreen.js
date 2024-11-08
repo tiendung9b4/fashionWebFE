@@ -6,9 +6,7 @@ import Order from '../components/Order'
 export default function OrderScreen() {
   return (
     <div>
-        <Header/>
-        <Order/>
-        <Footer/>
+      <Order />
     </div>
   )
 }

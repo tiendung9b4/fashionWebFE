@@ -16,14 +16,16 @@ import ManageCategoryScreen from './screens/ManageCategoryScreen';
 import ManageSubCategoryScreen from './screens/ManageSubCategoryScreen';
 import ManageProductScreen from './screens/ManageProductScreen';
 import ChatScreen from './screens/ChatScreen';
+import { ResultPage } from './screens/SuccessScreen';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
   const count = useSelector((state) => state.counter.value)
   const dispatch = useDispatch()
 
   return (
-    <BrowserRouter>
-        <Toaster />
+    <>
       <Routes>
         <Route path="/">
           <Route index element={<HomeScreen />} />
@@ -40,9 +42,10 @@ function App() {
           <Route path="manageSubCategory" element={<ManageSubCategoryScreen />} />
           <Route path="manageProduct" element={<ManageProductScreen />} />
           <Route path="chat" element={<ChatScreen />} />
+          <Route path="success" element={<ResultPage />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
 
