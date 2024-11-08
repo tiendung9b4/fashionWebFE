@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Button = ({ title, className }) => (
+const Button = ({ title, className, url }) => (
   <Link
-    to="/"
+    to={`${url}`}
     className={`${className} flex items-center justify-center gap-x-3 px-6 py-2 text-white font-bold leading-[21px] bg-[#03428E] rounded-[32px] transition-all duration-500 hover:bg-[#F26522]`}
   >
     <p className="text-base">{title}</p>
