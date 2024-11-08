@@ -6,9 +6,7 @@ import Home from '../components/Home'
 export default function HomeScreen() {
   return (
     <div>
-        <Header/>
-        <Home/>
-        <Footer/>
+      <Home />
     </div>
   )
 }
