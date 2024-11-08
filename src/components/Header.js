@@ -22,31 +22,35 @@ export default function Header() {
 
   return (
     <header>
-      <div className="bg-gray-900 text-white fixed w-full py-4">
+      <div className="bg-gray-900 text-white fixed w-full pt-4 z-50">
         <Container className="flex justify-between items-center">
-          <div className="flex items-center">
-            <a href="/" className="text-xl font-bold ">
+          <div className="flex flex-col justify-start h-full items-start">
+            <a href="/" className="text-xl font-extrabold">
               Fashion Stores
             </a>
           </div>
           {user?.roles?.includes('admin') && <>
             <Link
               to="/manageCoupon"
+              className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
             >
               ManageCoupon
             </Link>
             <Link
               to="/manageCategory"
+              className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
             >
               ManageCategory
             </Link>
             <Link
               to="/manageSubCategory"
+              className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
             >
               ManageSubCategory
             </Link>
             <Link
               to="/manageProduct"
+              className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
             >
               ManageProduct
             </Link>
@@ -57,31 +61,31 @@ export default function Header() {
             <ul className="flex items-center space-x-6">
               <Link
                 to="/home"
-                className="relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
               >
                 Home
               </Link>
               <Link
-                className="relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
                 to="/products"
               >
                 Our products
               </Link>
               <Link
-                className="relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
                 to="/products"
               >
                 About
               </Link>
               <Link
-                className="relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
                 to="/products"
               >
                 Contact us
               </Link>
               <Link
                 to="/products"
-                className="relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
               >
                 Products
               </Link>
@@ -93,13 +97,13 @@ export default function Header() {
               user['email'] == null ? <div className="flex space-x-2">
                 <Link
                   to="/login"
-                  className="relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                  className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
                 >
                   <span>Login</span>
                 </Link>
                 <Link
                   to="/register"
-                  className="relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                  className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
                 >
                   Register
                 </Link>
@@ -107,19 +111,19 @@ export default function Header() {
                 : <>
                   <Link
                     to="/cart"
-                    className="relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                    className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
                   >
                     Cart
                   </Link>
                   <Link
                     to="/order"
-                    className="relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                    className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
                   >
                     Order
                   </Link>
                   <Link
                     to="/chat"
-                    className="relative pb-2 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                    className="relative pb-4 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
                   >
                     Chat
                   </Link>

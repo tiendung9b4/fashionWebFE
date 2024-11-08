@@ -50,8 +50,8 @@ export default function Login() {
       backgroundSize: 'cover'
     }} className="min-h-screen flex items-center justify-center">
       <div className="bg-gray-300 rounded shadow-md w-[400px] sm:w-[1200px] sm:h-[600px] flex">
-        <div className='object-cover w-[60%]'>
-          <img src='/images/background2.jpg' className='h-full' />
+        <div className='w-[60%]'>
+          <img src='/images/background2.jpg' className='h-full object-cover' />
         </div>
         <div className='flex flex-col justify-center items-center w-[40%] p-4'>
           <h2 className="text-4xl font-extrabold uppercase mb-6 text-center">Đăng nhập</h2>

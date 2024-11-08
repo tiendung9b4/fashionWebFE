@@ -10,7 +10,7 @@ export default function Footer() {
         <Container>
           <div className="flex flex-col w-full">
             <div
-              className="md:flex md:flex-row w-full justify-between border-b-2
+              className="md:flex md:flex-row w-full justify-between items-center border-b-2
            border-white pb-6 pt-10"
             >
               <div>
@@ -22,12 +22,13 @@ export default function Footer() {
                   alt="logo FPT university"
                 />
               </div>
+              <h1 className="text-[55px] capitalize italic font-semibold text-transparent bg-gradient-to-r from-blue-600 via-orange-600 to-green-600 bg-clip-text animate-pulse drop-shadow-md">
+                More than a fashion store
+              </h1>
             </div>
             <div className="md:flex justify-between items-center pt-6 pb-10">
               <div className="flex flex-col justify-start items-start gap-3 text-white">
-                <h1 className="text-[32px] capitalize italic font-semibold text-transparent bg-gradient-to-r from-blue-500 via-orange-500 to-green-500 bg-clip-text animate-pulse drop-shadow-md">
-                  More than a fashion store
-                </h1>
+
 
                 <div className="flex flex-col justify-start items-start gap-3">
                   <div className="flex justify-start items-center gap-2">
